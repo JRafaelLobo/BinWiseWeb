@@ -53,13 +53,14 @@ El sistema permite:
 ---
 
 # Estructura del proyecto
-
+```
 .
+├── documentacion
 ├── backend
 ├── frontend
 ├── mysql
 └── docker-compose.yml
-
+```
 ---
 
 # Requisitos
