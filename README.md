@@ -76,18 +76,18 @@ Antes de ejecutar el proyecto necesitás:
 # Variables de entorno MySQL
 
 mysql/mysql.env
-
+```
 MYSQL_ROOT_PASSWORD=root
 MYSQL_DATABASE=binwise
 MYSQL_USER=binwise_user
 MYSQL_PASSWORD=binwise_password
-
+```
 ---
 
 # Variables de entorno Backend
 
 backend/.env
-
+```
 DB_HOST=mysql
 DB_PORT=3306
 DB_USER=binwise_user
@@ -96,7 +96,7 @@ DB_NAME=binwise
 
 JWT_SECRET=mysecretkey
 JWT_EXPIRES_IN=1d
-
+```
 ---
 
 # Ejecución con Docker
@@ -226,10 +226,10 @@ http://localhost:3000/api
 ECONNREFUSED mysql:3306
 
 Solución:
-
+```bash
 docker compose down -v
 docker compose up --build
-
+```
 ---
 
 ## Hot reload no funciona
