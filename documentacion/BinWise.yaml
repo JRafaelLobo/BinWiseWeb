@@ -1,0 +1,643 @@
+openapi: 3.0.3
+info:
+  title: BinWise API
+  description: >
+    API REST para BinWise, una aplicación que ayuda a los usuarios a clasificar
+    desechos, registrar reciclaje, consultar módulos educativos y visualizar
+    su progreso mediante puntos, niveles, recompensas y estadísticas.
+  version: 1.0.0
+  contact:
+    name: Grupo 1
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local de desarrollo
+  - url: http://localhost:5173
+    description: Frontend local de desarrollo
+  - url: https://api.binwise.com
+    description: Servidor de producción
+
+tags:
+  - name: Auth
+    description: Registro, inicio de sesión y perfil del usuario.
+  - name: Waste
+    description: Clasificación y categorías de desechos.
+  - name: Recycling
+    description: Registro e historial de reciclaje.
+  - name: Gamification
+    description: Puntos y niveles del usuario.
+  - name: Rewards
+    description: Recompensas obtenidas por el usuario.
+  - name: Education
+    description: Módulos educativos sobre reciclaje.
+  - name: Stats
+    description: Estadísticas generales del usuario.
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registrar un nuevo usuario
+      description: Crea una cuenta nueva en BinWise.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              name: Josué Ham
+              email: josue@example.com
+              password: "12345678"
+      responses:
+        "201":
+          description: Usuario registrado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        "400":
+          description: Datos inválidos o incompletos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Iniciar sesión
+      description: Permite al usuario iniciar sesión con su correo y contraseña.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: josue@example.com
+              password: "12345678"
+      responses:
+        "200":
+          description: Inicio de sesión exitoso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        "401":
+          description: Credenciales incorrectas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/profile:
+    get:
+      tags:
+        - Auth
+      summary: Obtener perfil del usuario
+      description: Devuelve la información del usuario autenticado.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Perfil obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: Token no enviado o inválido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/waste/classify:
+    post:
+      tags:
+        - Waste
+      summary: Clasificar un desecho
+      description: Recibe una imagen del desecho y devuelve la categoría recomendada.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassifyWasteRequest'
+      responses:
+        "200":
+          description: Desecho clasificado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassifyWasteResponse'
+        "400":
+          description: Imagen no enviada o formato inválido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/waste/categories:
+    get:
+      tags:
+        - Waste
+      summary: Obtener categorías de desechos
+      description: Lista las categorías disponibles para clasificar residuos.
+      responses:
+        "200":
+          description: Categorías obtenidas correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WasteCategory'
+
+  /api/recycling/register:
+    post:
+      tags:
+        - Recycling
+      summary: Registrar reciclaje
+      description: Registra que el usuario recicló un desecho y suma puntos a su progreso.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecyclingRegisterRequest'
+            example:
+              wasteName: Botella plástica
+              categoryId: 1
+              quantity: 2
+              notes: Botellas limpias recicladas en casa.
+      responses:
+        "201":
+          description: Reciclaje registrado correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecyclingRecord'
+        "400":
+          description: Datos inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/recycling/history:
+    get:
+      tags:
+        - Recycling
+      summary: Obtener historial de reciclaje
+      description: Devuelve el historial de reciclaje del usuario autenticado.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Historial obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecyclingRecord'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/gamification/points:
+    get:
+      tags:
+        - Gamification
+      summary: Obtener puntos del usuario
+      description: Devuelve los puntos acumulados por el usuario.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Puntos obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsResponse'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/gamification/level:
+    get:
+      tags:
+        - Gamification
+      summary: Obtener nivel del usuario
+      description: Devuelve el nivel actual y el progreso hacia el siguiente nivel.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Nivel obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelResponse'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/rewards/user:
+    get:
+      tags:
+        - Rewards
+      summary: Obtener recompensas del usuario
+      description: Lista las recompensas o insignias obtenidas por el usuario.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Recompensas obtenidas correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserReward'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/education/modules:
+    get:
+      tags:
+        - Education
+      summary: Obtener módulos educativos
+      description: Lista los módulos educativos disponibles sobre reciclaje.
+      responses:
+        "200":
+          description: Módulos obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EducationModule'
+
+  /api/education/modules/{id}:
+    get:
+      tags:
+        - Education
+      summary: Obtener detalle de un módulo educativo
+      description: Devuelve el contenido completo de un módulo educativo específico.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del módulo educativo.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Módulo obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EducationModuleDetail'
+        "404":
+          description: Módulo no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/stats/user:
+    get:
+      tags:
+        - Stats
+      summary: Obtener estadísticas del usuario
+      description: Devuelve estadísticas generales del usuario sobre reciclaje y progreso.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Estadísticas obtenidas correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStats'
+        "401":
+          description: Usuario no autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Josué Ham
+        email:
+          type: string
+          format: email
+          example: josue@example.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: "12345678"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: josue@example.com
+        password:
+          type: string
+          format: password
+          example: "12345678"
+
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Inicio de sesión exitoso
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Josué Ham
+        email:
+          type: string
+          format: email
+          example: josue@example.com
+        totalPoints:
+          type: integer
+          example: 340
+        level:
+          type: integer
+          example: 4
+
+    ClassifyWasteRequest:
+      type: object
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+          description: Imagen del desecho tomada con la cámara.
+
+    ClassifyWasteResponse:
+      type: object
+      properties:
+        wasteName:
+          type: string
+          example: Botella plástica
+        category:
+          $ref: '#/components/schemas/WasteCategory'
+        confidence:
+          type: number
+          format: float
+          example: 0.94
+        recommendation:
+          type: string
+          example: Depositar en el contenedor amarillo y retirar líquidos antes de reciclar.
+
+    WasteCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Plástico
+        description:
+          type: string
+          example: Residuos reciclables hechos de plástico.
+        color:
+          type: string
+          example: Amarillo
+
+    RecyclingRegisterRequest:
+      type: object
+      required:
+        - wasteName
+        - categoryId
+        - quantity
+      properties:
+        wasteName:
+          type: string
+          example: Botella plástica
+        categoryId:
+          type: integer
+          example: 1
+        quantity:
+          type: integer
+          minimum: 1
+          example: 2
+        notes:
+          type: string
+          example: Botellas limpias recicladas en casa.
+
+    RecyclingRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 15
+        userId:
+          type: integer
+          example: 1
+        wasteName:
+          type: string
+          example: Botella plástica
+        category:
+          $ref: '#/components/schemas/WasteCategory'
+        quantity:
+          type: integer
+          example: 2
+        pointsEarned:
+          type: integer
+          example: 20
+        recycledAt:
+          type: string
+          format: date-time
+          example: "2026-06-05T18:30:00Z"
+
+    PointsResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        totalPoints:
+          type: integer
+          example: 340
+        pointsThisMonth:
+          type: integer
+          example: 90
+
+    LevelResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        currentLevel:
+          type: integer
+          example: 4
+        currentLevelName:
+          type: string
+          example: Eco Aprendiz
+        totalPoints:
+          type: integer
+          example: 340
+        pointsToNextLevel:
+          type: integer
+          example: 160
+        progressPercentage:
+          type: number
+          format: float
+          example: 68
+
+    UserReward:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Primer reciclaje
+        description:
+          type: string
+          example: Recompensa obtenida al registrar el primer reciclaje.
+        type:
+          type: string
+          example: Insignia
+        earnedAt:
+          type: string
+          format: date-time
+          example: "2026-06-05T18:30:00Z"
+
+    EducationModule:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Introducción al reciclaje
+        description:
+          type: string
+          example: Conceptos básicos para aprender a separar residuos.
+        estimatedMinutes:
+          type: integer
+          example: 10
+        completed:
+          type: boolean
+          example: false
+
+    EducationModuleDetail:
+      allOf:
+        - $ref: '#/components/schemas/EducationModule'
+        - type: object
+          properties:
+            content:
+              type: string
+              example: El reciclaje permite transformar residuos en nuevos productos y reducir la contaminación ambiental.
+
+    UserStats:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        totalRecycledItems:
+          type: integer
+          example: 28
+        totalPoints:
+          type: integer
+          example: 340
+        currentLevel:
+          type: integer
+          example: 4
+        rewardsEarned:
+          type: integer
+          example: 5
+        mostRecycledCategory:
+          type: string
+          example: Plástico
+        lastRecyclingDate:
+          type: string
+          format: date-time
+          example: "2026-06-05T18:30:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Ocurrió un error al procesar la solicitud.
