@@ -25,3 +25,44 @@ export interface RegisterRequest {
   email: string;
   password: string;
 }
+
+export interface WasteCategory {
+  id: number;
+  name: string;
+  description: string | null;
+  color: string | null;
+}
+
+export interface UserStats {
+  userId: number;
+  totalRecycledItems: number;
+  totalPoints: number;
+  currentLevel: number;
+  rewardsEarned: number;
+  mostRecycledCategory: string;
+  lastRecyclingDate: string | null;
+}
+
+export interface ClassifyResponse {
+  wasteName: string;
+  category: WasteCategory;
+  confidence: number;
+  recommendation: string;
+}
+
+export interface RecyclingRegisterRequest {
+  wasteName: string;
+  categoryId: number;
+  quantity: number;
+  notes?: string;
+}
+
+export interface RecyclingRecord {
+  id: number;
+  wasteName: string;
+  category: WasteCategory;
+  quantity: number;
+  pointsEarned: number;
+  recycledAt: string;
+  notes: string | null;
+}

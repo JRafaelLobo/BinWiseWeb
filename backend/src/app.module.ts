@@ -25,6 +25,7 @@ import { StatsModule } from './stats/stats.module';
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
+        charset: 'utf8mb4', // Evita que las tildes/ñ se corrompan al leer
         autoLoadEntities: true,
         synchronize: true, // Set to false in production
       }),

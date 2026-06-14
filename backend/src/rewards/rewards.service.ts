@@ -33,19 +33,20 @@ export class RewardsService {
   }
 
   async checkAndGrantRewards(userId: number) {
-    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['rewards'] });
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error('User not found');
     }
     const allRewards = await this.rewardsRepository.find();
-    if (!allRewards) {
-      throw new Error('No rewards found');
-    }
+
+    // Recompensas que el usuario ya tiene (consultadas directamente).
+    const existingRewards = await this.userRewardsRepository.find({
+      where: { user: { id: userId } },
+      relations: ['reward'],
+    });
+
     for (const reward of allRewards) {
-      if (!reward) {
-        throw new Error('Reward not found');
-      }
-      const hasReward = user.rewards.some(ur => ur.reward.id === reward.id);
+      const hasReward = existingRewards.some(ur => ur.reward.id === reward.id);
       if (!hasReward && user.totalPoints >= reward.pointsRequired) {
         const newUserReward = this.userRewardsRepository.create({ user, reward });
         await this.userRewardsRepository.save(newUserReward);
