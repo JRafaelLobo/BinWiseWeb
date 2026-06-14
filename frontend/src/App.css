@@ -604,6 +604,189 @@
   border-radius: var(--radius);
 }
 
+/* ---- Progreso (gamificación) ---- */
+.level-card {
+  align-items: flex-start;
+}
+
+.level-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--green-50);
+  color: var(--green-900);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.level-name {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--green-700);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--green-50);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green-500), var(--green-700));
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* ---- Recompensas ---- */
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1.75rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.reward-medal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-500), var(--green-900));
+  color: #fff;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.reward-name {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.reward-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.reward-date {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--green-700);
+  font-weight: 600;
+}
+
+/* ---- Módulos educativos ---- */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.module-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(27, 94, 32, 0.12);
+  text-decoration: none;
+}
+
+.module-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.module-title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.module-done {
+  flex-shrink: 0;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--green-50);
+  color: var(--green-900);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.module-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.module-meta {
+  font-size: 0.85rem;
+  color: var(--green-700);
+  font-weight: 600;
+}
+
+/* ---- Detalle de módulo ---- */
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.module-article {
+  gap: 0.75rem;
+}
+
+.module-article-desc {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.module-divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0.5rem 0;
+}
+
+.module-content {
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
 /* Responsive: nav + stats en móvil */
 @media (max-width: 640px) {
   .app-nav {

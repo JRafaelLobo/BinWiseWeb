@@ -24,6 +24,9 @@ const links = [
   { to: '/clasificar', label: 'Clasificar' },
   { to: '/registrar', label: 'Registrar' },
   { to: '/historial', label: 'Historial' },
+  { to: '/progreso', label: 'Progreso' },
+  { to: '/recompensas', label: 'Recompensas' },
+  { to: '/aprende', label: 'Aprende' },
 ];
 
 // Estructura del área autenticada: barra de navegación + contenido.

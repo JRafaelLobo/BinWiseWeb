@@ -66,3 +66,38 @@ export interface RecyclingRecord {
   recycledAt: string;
   notes: string | null;
 }
+
+export interface PointsResponse {
+  userId: number;
+  totalPoints: number;
+  pointsThisMonth: number;
+}
+
+export interface LevelResponse {
+  userId: number;
+  currentLevel: number;
+  currentLevelName: string;
+  totalPoints: number;
+  pointsToNextLevel: number;
+  progressPercentage: number;
+}
+
+export interface UserReward {
+  id: number;
+  name: string;
+  description: string;
+  type: string;
+  earnedAt: string;
+}
+
+export interface EducationModule {
+  id: number;
+  title: string;
+  description: string;
+  estimatedMinutes: number;
+  completed: boolean;
+}
+
+export interface EducationModuleDetail extends EducationModule {
+  content: string;
+}

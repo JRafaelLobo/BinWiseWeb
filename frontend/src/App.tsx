@@ -5,6 +5,10 @@ import { Dashboard } from './pages/Dashboard';
 import { ClassifyWaste } from './pages/ClassifyWaste';
 import { RegisterRecycling } from './pages/RegisterRecycling';
 import { History } from './pages/History';
+import { Progress } from './pages/Progress';
+import { Rewards } from './pages/Rewards';
+import { Education } from './pages/Education';
+import { EducationDetail } from './pages/EducationDetail';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AppLayout } from './components/AppLayout';
 import './App.css';
@@ -24,6 +28,10 @@ function App() {
             <Route path="/clasificar" element={<ClassifyWaste />} />
             <Route path="/registrar" element={<RegisterRecycling />} />
             <Route path="/historial" element={<History />} />
+            <Route path="/progreso" element={<Progress />} />
+            <Route path="/recompensas" element={<Rewards />} />
+            <Route path="/aprende" element={<Education />} />
+            <Route path="/aprende/:id" element={<EducationDetail />} />
           </Route>
         </Route>
 
