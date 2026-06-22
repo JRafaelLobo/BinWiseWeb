@@ -10,7 +10,7 @@ export default defineConfig({
       // El backend NestJS expone sus rutas bajo /api (ej. /api/auth/login).
       // Reenviamos esas peticiones al backend para evitar problemas de CORS.
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://backend:3000',
         changeOrigin: true,
       },
     },
