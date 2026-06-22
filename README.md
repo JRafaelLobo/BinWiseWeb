@@ -474,9 +474,9 @@ Proyecto desarrollado con fines académicos y educativos para promover la gesti�
 
 # Autores
 
-**José Rafael Lobo Guardado**
-**Josue Andres Ham Alvarez**
-**Daniel Alejandro Reyes Alemán**
+- **José Rafael Lobo Guardado**
+- **Josue Andres Ham Alvarez**
+- **Daniel Alejandro Reyes Alemán**
 
 
 Proyecto: **BinWise**
