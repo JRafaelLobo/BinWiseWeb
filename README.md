@@ -272,19 +272,19 @@ El proyecto incluye imágenes Docker optimizadas para entornos productivos.
 ## Construir Backend
 
 ```bash
-docker build -f Dockerfile.prod -t raf05/binwiseweb-backend:1.0 .
+docker build -f Dockerfile.prod -t usuario/binwiseweb-backend:1.0 .
 ```
 
 ## Construir Frontend
 
 ```bash
-docker build -f Dockerfile.prod -t raf05/binwiseweb-frontend:1.0 .
+docker build -f Dockerfile.prod -t usuario/binwiseweb-frontend:1.0 .
 ```
 
 ## Construir Base de Datos
 
 ```bash
-docker build -f Dockerfile.prod -t raf05/binwiseweb-mysql:1.0 .
+docker build -f Dockerfile.prod -t usuario/binwiseweb-mysql:1.0 .
 ```
 
 ---
@@ -300,9 +300,9 @@ docker login
 Publicar imágenes:
 
 ```bash
-docker push raf05/binwiseweb-backend:1.0
-docker push raf05/binwiseweb-frontend:1.0
-docker push raf05/binwiseweb-mysql:1.0
+docker push usuario/binwiseweb-backend:1.0
+docker push usuario/binwiseweb-frontend:1.0
+docker push usuario/binwiseweb-mysql:1.0
 ```
 
 ---
