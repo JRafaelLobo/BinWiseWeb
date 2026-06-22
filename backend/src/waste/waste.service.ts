@@ -10,7 +10,6 @@ import { WasteCategory } from './waste-category.entity';
 import { ClassifyWasteResponseDto } from './dto/classify-waste-response.dto';
 import { AiService } from './ai.service';
 
-
 @Injectable()
 export class WasteService {
   constructor(
@@ -18,7 +17,8 @@ export class WasteService {
     private wasteCategoriesRepository: Repository<WasteCategory>,
 
     private readonly aiService: AiService,
-  ) { }
+  ) {}
+
   private readonly CLASSES = [
     'cardboard',
     'glass',
@@ -31,7 +31,6 @@ export class WasteService {
   async classify(
     file: Express.Multer.File,
   ): Promise<ClassifyWasteResponseDto> {
-
     const predictions =
       await this.aiService.predict(
         file.buffer,
@@ -58,6 +57,13 @@ export class WasteService {
         `Category '${wasteName}' not found`,
       );
     }
+
+    console.log({
+      wasteName,
+      confidence,
+      predictions,
+    });
+
     return {
       wasteName,
       category,
@@ -72,20 +78,22 @@ export class WasteService {
   private getRecommendation(
     wasteType: string,
   ): string {
-
-    const recommendations = {
+    const recommendations: Record<
+      string,
+      string
+    > = {
       cardboard:
-        'Depositar limpio y seco en reciclaje de cartón.',
+        'Doblar y depositar el cartón limpio en el contenedor correspondiente.',
       glass:
-        'Depositar en el contenedor de vidrio.',
+        'Depositar el vidrio en el contenedor verde y separar tapas o accesorios.',
       metal:
-        'Separar y reciclar junto con metales.',
+        'Reciclar latas y envases metálicos limpios.',
       paper:
-        'Mantener seco antes de reciclar.',
+        'Mantener el papel seco y libre de residuos antes de reciclarlo.',
       plastic:
-        'Lavar y depositar en reciclaje de plásticos.',
+        'Lavar los envases plásticos antes de depositarlos para reciclaje.',
       trash:
-        'Desechar en residuos generales.',
+        'Depositar en el contenedor de residuos generales.',
     };
 
     return (
@@ -94,7 +102,9 @@ export class WasteService {
     );
   }
 
-  async getCategories(): Promise<WasteCategory[]> {
+  async getCategories(): Promise<
+    WasteCategory[]
+  > {
     return this.wasteCategoriesRepository.find();
   }
 }

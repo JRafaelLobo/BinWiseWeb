@@ -10,12 +10,12 @@ SET NAMES utf8mb4;
 -- Categorías de residuos
 -- (La clasificación por imagen del backend usa la categoría id = 1)
 INSERT INTO WasteCategories (id, name, description, color) VALUES
-  (1, 'Plástico',        'Botellas, envases y bolsas plásticas.',            '#FFF59D'),
-  (2, 'Papel y cartón',  'Periódicos, cajas, revistas y hojas.',             '#90CAF9'),
-  (3, 'Vidrio',          'Botellas y frascos de vidrio.',                    '#A5D6A7'),
-  (4, 'Metal',           'Latas de aluminio y envases metálicos.',           '#CFD8DC'),
-  (5, 'Orgánico',        'Restos de comida y residuos biodegradables.',      '#C5E1A5'),
-  (6, 'Electrónicos',    'Pilas, cables y dispositivos electrónicos.',       '#FFAB91');
+  (1, 'plastic',   'Botellas, envases y bolsas plásticas.',             '#FFF59D'),
+  (2, 'paper',     'Hojas, revistas, periódicos y papel reciclable.',   '#90CAF9'),
+  (3, 'glass',     'Botellas y frascos de vidrio.',                     '#A5D6A7'),
+  (4, 'metal',     'Latas de aluminio y envases metálicos.',            '#CFD8DC'),
+  (5, 'cardboard', 'Cajas y empaques de cartón reciclable.',            '#D7B899'),
+  (6, 'trash',     'Residuos que no pueden reciclarse.',                '#BDBDBD');
 
 -- Recompensas
 INSERT INTO Rewards (id, name, description, type, pointsRequired) VALUES
